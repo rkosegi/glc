@@ -7,4 +7,3 @@ You need [Go runtime](https://go.dev/dl/) and [Goreleaser](https://github.com/go
 ```shell
 make build
 ```
-

@@ -1,0 +1,22 @@
+{{- printf "# %s" .toRev }}
+
+## Contributors
+
+{{ range .uniqueAuthors }}
+{{- printf "- %s\n" . }}
+{{- end }}
+
+## Merge requests
+
+{{ range .mergeRequests }}
+{{- printf "- %s %s%s  %s\n" .references.short "@" .author.username .title }}
+{{- end }}
+
+## Commits
+
+{{ range .commits }}
+{{- printf "- %s %s\n" .short_id .message }}
+{{- end }}
+
+
+[Full diff]({{ .compare.web_url }})

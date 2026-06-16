@@ -80,9 +80,11 @@ func NewCommand() *cobra.Command {
 		Long: `Compute difference between 2 GitLab revisions
 
 In this example, there is previous version tag "v0.0.1" and newly created tag "v0.10.2", which is about to be released.
-Following command will generate diff data and writes it to the file "diff.yaml" :
+Following command will generate diff data in project with id=123 and writes it to the file "diff.yaml" :
 
-glc revdiff --from v0.0.1 --to v0.10.2 --output diff.yaml
+	glc revdiff --from v0.0.1 --to v0.10.2 --project-id 123 --output diff.yaml
+
+Remember to set GITLAB_TOKEN and CI_API_V4_URL environment variables.
 `,
 	}
 

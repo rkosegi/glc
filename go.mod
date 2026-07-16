@@ -18,7 +18,7 @@ go 1.26.4
 
 require (
 	github.com/rkosegi/slog-config v0.0.1
-	github.com/rkosegi/yaml-toolkit v1.0.68
+	github.com/rkosegi/yaml-toolkit v1.0.69
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10

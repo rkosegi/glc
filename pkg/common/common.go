@@ -24,6 +24,10 @@ import (
 	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
 )
 
+var (
+	ErrProjectIdMissing = errors.New("project id missing (--project-id)")
+)
+
 type AuthData struct {
 	EndpointEnvironmentVariable string
 	ResolvedEndpoint            string `yaml:"-" json:"-"`
@@ -69,4 +73,31 @@ func GetGitlabRef(d *AuthData, opts ...gitlab.ClientOptionFunc) (*gitlab.Client,
 		opts = append(opts, gitlab.WithBaseURL(endpoint))
 	}
 	return gitlab.NewClient(d.Token(), opts...)
+}
+
+// FetchItems consumes paged results from gitlab API, possibly capping it to some number
+// Provided fetchFn must correctly update field Page in gitlab.ListOptions with value from parameter for loop to advance
+func FetchItems[T any](gc *gitlab.Client, fetchFn func(d *gitlab.Client, page int64) ([]*T, error), max int) ([]*T, error) {
+	var (
+		err    error
+		page   int64
+		items  []*T
+		result []*T
+	)
+
+	page = 1
+	for {
+		if items, err = fetchFn(gc, page); err != nil {
+			return nil, err
+		}
+		page += 1
+		if len(items) == 0 {
+			break
+		}
+		result = append(result, items...)
+		if max > 0 && len(result) >= max {
+			break
+		}
+	}
+	return result, err
 }

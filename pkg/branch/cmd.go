@@ -14,23 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package branch
 
-import (
-	"github.com/rkosegi/glc/pkg/branch"
-	"github.com/rkosegi/glc/pkg/internal"
-	"github.com/rkosegi/glc/pkg/revdiff"
-	"github.com/spf13/cobra"
-)
+import "github.com/spf13/cobra"
 
-func main() {
-
-	rootcmd := cobra.Command{}
-	rootcmd.AddCommand(revdiff.NewCommand())
-	rootcmd.AddCommand(internal.NewVersionCommand())
-	rootcmd.AddCommand(branch.NewCommand())
-
-	if err := rootcmd.Execute(); err != nil {
-		panic(err)
+func NewCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "branch",
+		Short: "Branch related commands",
 	}
+	cmd.AddCommand(newPruneCmd())
+	return cmd
 }

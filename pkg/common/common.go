@@ -18,7 +18,9 @@ package common
 
 import (
 	"errors"
+	"net/url"
 	"os"
+	"strings"
 
 	"github.com/spf13/pflag"
 	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
@@ -100,4 +102,12 @@ func FetchItems[T any](gc *gitlab.Client, fetchFn func(d *gitlab.Client, page in
 		}
 	}
 	return result, err
+}
+
+// ExtractProjectIdFromUrl perform naive extraction of string-based project identifier from URL path.
+// This is useful when try to figure out what project ID to use when inside git directory
+func ExtractProjectIdFromUrl(projUrl *url.URL) string {
+	p := strings.TrimPrefix(projUrl.Path, "/")
+	p = strings.TrimSuffix(p, ".git")
+	return url.PathEscape(p)
 }

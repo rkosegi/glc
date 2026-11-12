@@ -31,6 +31,9 @@ build:
 build-all:
 	goreleaser build --snapshot --clean
 
+install:
+	cp ./dist/glc_linux_amd64_v1/glc ~/bin/
+
 update-go-deps:
 	@for m in $$(go list -mod=readonly -m -f '{{ if and (not .Indirect) (not .Main)}}{{.Path}}{{end}}' all); do \
 		go get $$m; \

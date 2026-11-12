@@ -21,25 +21,24 @@ import (
 	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
 )
 
-type ListBranchesOpt func(lo *gitlab.ListBranchesOptions)
-
-func OnlyMatchingRe2(re2 string) ListBranchesOpt {
+func OnlyMatchingRe2(re2 string) common.ListItemsOpt[gitlab.ListBranchesOptions] {
 	return func(lo *gitlab.ListBranchesOptions) {
 		lo.Regex = &re2
 	}
 }
 
-func ListWithOpts(c *gitlab.Client, projId any, maxTotal int, opts ...ListBranchesOpt) ([]*gitlab.Branch, error) {
-	return common.FetchItems(c, func(cl *gitlab.Client, page int64) ([]*gitlab.Branch, error) {
+func ListWithOpts(c *gitlab.Client, projId any, maxTotal int, opts ...common.ListItemsOpt[gitlab.ListBranchesOptions]) ([]*gitlab.Branch, error) {
+	return common.FetchItems(c, func(cl *gitlab.Client, page int64, perPage int64) ([]*gitlab.Branch, *gitlab.Response, error) {
 		lopts := &gitlab.ListBranchesOptions{
 			ListOptions: gitlab.ListOptions{
-				Page: page,
+				Page:    page,
+				PerPage: perPage,
 			},
 		}
 		for _, opt := range opts {
 			opt(lopts)
 		}
-		branches, _, err := cl.Branches.ListBranches(projId, lopts)
-		return branches, err
+		branches, resp, err := cl.Branches.ListBranches(projId, lopts)
+		return branches, resp, err
 	}, maxTotal)
 }

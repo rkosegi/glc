@@ -77,7 +77,7 @@ func newPruneCmd() *cobra.Command {
 				}
 				d.l.DebugContext(cmd.Context(), "got MR list", "project_id", d.projectId, "count", len(mrs))
 			}
-			var opts []ListBranchesOpt
+			var opts []common.ListItemsOpt[gitlab.ListBranchesOptions]
 			if d.onlyMatching != "" {
 				opts = append(opts, OnlyMatchingRe2(d.onlyMatching))
 			}

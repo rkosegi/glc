@@ -138,7 +138,7 @@ func (d *differ) Compare(ctx context.Context, from, to string, opts ...CompareOp
 	comp.Commits = nil
 
 	d.l.DebugContext(ctx, "diff completed", "total_mrs", len(mrs), "total_commits", len(commits),
-		"total_authors", len(uniqueAuthors), "time_spent", time.Now().Sub(start).Seconds())
+		"total_authors", len(uniqueAuthors), "time_spent", time.Since(start).Seconds())
 	return &DiffData{
 		FromRev:       from,
 		ToRev:         to,

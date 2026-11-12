@@ -20,6 +20,7 @@ import (
 	"github.com/rkosegi/glc/pkg/branch"
 	"github.com/rkosegi/glc/pkg/internal"
 	"github.com/rkosegi/glc/pkg/mr"
+	"github.com/rkosegi/glc/pkg/project"
 	"github.com/rkosegi/glc/pkg/revdiff"
 	"github.com/spf13/cobra"
 )
@@ -31,6 +32,7 @@ func main() {
 	rootcmd.AddCommand(internal.NewVersionCommand())
 	rootcmd.AddCommand(branch.NewCommand())
 	rootcmd.AddCommand(mr.NewCommand())
+	rootcmd.AddCommand(project.NewCommand())
 
 	if err := rootcmd.Execute(); err != nil {
 		panic(err)

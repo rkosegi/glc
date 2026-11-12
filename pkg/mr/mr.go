@@ -48,7 +48,7 @@ func ListInProject(c *gitlab.Client, projId any, maxTotal int, opts ...common.Li
 }
 
 type data struct {
-	projId         int64
+	projId         string
 	resolvedProjId any
 	gc             *gitlab.Client
 	auth           *common.AuthData
@@ -62,7 +62,7 @@ func formatTime(t *time.Time) string {
 }
 
 func (d *data) ResolveProjID() (err error) {
-	if d.projId == 0 {
+	if len(d.projId) == 0 {
 		d.resolvedProjId, err = common.GuessProjectIdFromCwd()
 		return err
 	}

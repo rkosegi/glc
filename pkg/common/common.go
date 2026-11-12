@@ -19,7 +19,6 @@ package common
 import (
 	"bytes"
 	"errors"
-	"net/url"
 	"os"
 	"os/exec"
 	"strings"
@@ -158,11 +157,9 @@ func FindGitRemoteUrl(dir string) (string, error) {
 	return "", nil
 }
 
-// ExtractProjectIdFromUrl perform naive extraction of string-based project identifier from URL path.
-// This is useful when try to figure out what project ID to use when inside git directory
-func ExtractProjectIdFromUrl(projUrl string) string {
-	p := strings.TrimPrefix(projUrl, "http://")
-	p = strings.TrimPrefix(p, "https://")
+func extractProjectIdFromHttpUrl(p string) string {
+	startIdx := strings.Index(p, "://")
+	p = p[startIdx+3:]
 	start := strings.Index(p, "/")
 	if start == -1 {
 		return ""
@@ -170,7 +167,30 @@ func ExtractProjectIdFromUrl(projUrl string) string {
 	p = p[start:]
 	p = strings.TrimPrefix(p, "/")
 	p = strings.TrimSuffix(p, ".git")
-	return url.PathEscape(p)
+	return p
+}
+
+func extractProjectIdFromGitUrl(p string) string {
+	p = p[len("git@"):]
+	colIndex := strings.Index(p, ":")
+	if colIndex == -1 {
+		return ""
+	}
+	p = p[colIndex+1:]
+	p = strings.TrimSuffix(p, ".git")
+	return p
+}
+
+// ExtractProjectIdFromUrl perform naive extraction of string-based project identifier from URL path.
+// This is useful when try to figure out what project ID to use when inside git directory
+func ExtractProjectIdFromUrl(projUrl string) string {
+	if strings.HasPrefix(projUrl, "git@") {
+		return extractProjectIdFromGitUrl(projUrl)
+	}
+	if strings.HasPrefix(projUrl, "https://") || strings.HasPrefix(projUrl, "http://") {
+		return extractProjectIdFromHttpUrl(projUrl)
+	}
+	return ""
 }
 
 // GuessProjectIdFromCwd tries the best effort to get project ID from git URL, if configured.
@@ -187,12 +207,12 @@ func GuessProjectIdFromCwd() (string, error) {
 	return o, nil
 }
 
-func AddProjectIdFlag(pf *pflag.FlagSet, projectId *int64) {
+func AddProjectIdFlag(pf *pflag.FlagSet, projectId *string) {
 	AddProjectIdFlagWithUsage(pf, projectId, "GitLab project id to use")
 }
 
-func AddProjectIdFlagWithUsage(pf *pflag.FlagSet, projectId *int64, usage string) {
-	pf.Int64Var(projectId, "project-id", *projectId, usage)
+func AddProjectIdFlagWithUsage(pf *pflag.FlagSet, projectId *string, usage string) {
+	pf.StringVar(projectId, "project-id", *projectId, usage)
 }
 
 func CompressText(text string, maxLen int) string {

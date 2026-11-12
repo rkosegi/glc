@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/magiconair/properties/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func urlMust(u string) *url.URL {

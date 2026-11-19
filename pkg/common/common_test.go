@@ -18,9 +18,9 @@ func TestExtractProjectIdFromUrl(t *testing.T) {
 			assert.Equal(t, "", ExtractProjectIdFromUrl("localhost"))
 		})
 		t.Run("OK", func(t *testing.T) {
-			assert.Equal(t, "my-org%2Fmy-group%2Fmy-proj", ExtractProjectIdFromUrl(
+			assert.Equal(t, "my-org/my-group/my-proj", ExtractProjectIdFromUrl(
 				"https://mygitlab.acme.tld/my-org/my-group/my-proj.git"))
-			assert.Equal(t, "my-org%2Fmy-group%2Fmy-proj", ExtractProjectIdFromUrl(
+			assert.Equal(t, "my-org/my-group/my-proj", ExtractProjectIdFromUrl(
 				"https://mygitlab.acme.tld/my-org/my-group/my-proj"))
 		})
 	})
@@ -30,9 +30,9 @@ func TestExtractProjectIdFromUrl(t *testing.T) {
 				"git@mygitlab.acme.tld/my-org/my-group/my-proj.git"))
 		})
 		t.Run("ok", func(t *testing.T) {
-			assert.Equal(t, "my-org%2Fmy-group%2Fmy-proj", ExtractProjectIdFromUrl(
+			assert.Equal(t, "my-org/my-group/my-proj", ExtractProjectIdFromUrl(
 				"git@mygitlab.acme.tld:my-org/my-group/my-proj.git"))
-			assert.Equal(t, "my-org%2Fmy-group%2Fmy-proj", ExtractProjectIdFromUrl(
+			assert.Equal(t, "my-org/my-group/my-proj", ExtractProjectIdFromUrl(
 				"git@mygitlab.acme.tld:my-org/my-group/my-proj"))
 		})
 	})

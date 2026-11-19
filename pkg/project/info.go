@@ -48,7 +48,7 @@ func doInfo(d *data) error {
 	fmt.Printf("URL: %s\n", pu)
 
 	d.projId = common.ExtractProjectIdFromUrl(pu)
-	fmt.Printf("ID: %s\n", url.PathEscape( d.projId))
+	fmt.Printf("ID: %s\n", url.PathEscape(d.projId))
 
 	if d.gc, err = common.GetGitlabRef(d.auth); err != nil {
 		return err

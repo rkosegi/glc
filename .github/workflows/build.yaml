@@ -27,6 +27,6 @@ permissions:
 
 jobs:
   ci:
-    uses: rkosegi/github-workflows/.github/workflows/go-ci.yaml@a6c35f88b007c59deae41f7c1c8fa3fd7634bc67 # v0.0.12
+    uses: rkosegi/github-workflows/.github/workflows/go-ci.yaml@d3985e38f8555b135c8e288a6dd843b5ed955a3b # v0.0.12
     with:
       goreleaser: true
